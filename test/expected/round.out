@@ -1,0 +1,1389 @@
+SELECT '-0.026'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ -0.03
+(1 row)
+
+SELECT '-0.025'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ -0.02
+(1 row)
+
+SELECT '-0.024'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ -0.02
+(1 row)
+
+SELECT '-0.016'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ -0.02
+(1 row)
+
+SELECT '-0.015'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ -0.02
+(1 row)
+
+SELECT '-0.014'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ -0.01
+(1 row)
+
+SELECT '-0.006'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ -0.01
+(1 row)
+
+SELECT '-0.005'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.00
+(1 row)
+
+SELECT '-0.004'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.00
+(1 row)
+
+SELECT '0.004'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.00
+(1 row)
+
+SELECT '0.005'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.00
+(1 row)
+
+SELECT '0.006'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.01
+(1 row)
+
+SELECT '0.014'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.01
+(1 row)
+
+SELECT '0.015'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.02
+(1 row)
+
+SELECT '0.016'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.02
+(1 row)
+
+SELECT '0.024'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.02
+(1 row)
+
+SELECT '0.025'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.02
+(1 row)
+
+SELECT '0.026'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.03
+(1 row)
+
+SELECT '0.145'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.14
+(1 row)
+
+SELECT '0.1450'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.14
+(1 row)
+
+SELECT '0.14509'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.15
+(1 row)
+
+SELECT '0.1451'::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.15
+(1 row)
+
+SELECT '0.145'::numeric::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.14
+(1 row)
+
+SELECT '0.1450'::numeric::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.14
+(1 row)
+
+SELECT '0.14509'::numeric::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.15
+(1 row)
+
+SELECT '0.1451'::numeric::FIXEDDECIMAL;
+ fixeddecimal 
+--------------
+ 0.15
+(1 row)
+
+SELECT CAST('-0.026'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.03
+(1 row)
+
+SELECT CAST('-0.025'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.02
+(1 row)
+
+SELECT CAST('-0.024'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.02
+(1 row)
+
+SELECT CAST('-0.016'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.02
+(1 row)
+
+SELECT CAST('-0.015'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.02
+(1 row)
+
+SELECT CAST('-0.014'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.01
+(1 row)
+
+SELECT CAST('-0.006'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.01
+(1 row)
+
+SELECT CAST('-0.005'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.00
+(1 row)
+
+SELECT CAST('-0.004'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.00
+(1 row)
+
+SELECT CAST('0.004'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.00
+(1 row)
+
+SELECT CAST('0.005'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.00
+(1 row)
+
+SELECT CAST('0.006'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.01
+(1 row)
+
+SELECT CAST('0.014'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.01
+(1 row)
+
+SELECT CAST('0.015'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.02
+(1 row)
+
+SELECT CAST('0.016'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.02
+(1 row)
+
+SELECT CAST('0.024'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.02
+(1 row)
+
+SELECT CAST('0.025'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.02
+(1 row)
+
+SELECT CAST('0.026'::FLOAT AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.03
+(1 row)
+
+SELECT CAST('-0.026'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.03
+(1 row)
+
+SELECT CAST('-0.025'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.02
+(1 row)
+
+SELECT CAST('-0.024'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.02
+(1 row)
+
+SELECT CAST('-0.016'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.02
+(1 row)
+
+SELECT CAST('-0.015'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.02
+(1 row)
+
+SELECT CAST('-0.014'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.01
+(1 row)
+
+SELECT CAST('-0.006'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.01
+(1 row)
+
+SELECT CAST('-0.005'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.00
+(1 row)
+
+SELECT CAST('-0.004'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.00
+(1 row)
+
+SELECT CAST('0.004'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.00
+(1 row)
+
+SELECT CAST('0.005'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.00
+(1 row)
+
+SELECT CAST('0.006'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.01
+(1 row)
+
+SELECT CAST('0.014'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.01
+(1 row)
+
+SELECT CAST('0.015'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.02
+(1 row)
+
+SELECT CAST('0.016'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.02
+(1 row)
+
+SELECT CAST('0.024'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.02
+(1 row)
+
+SELECT CAST('0.025'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.02
+(1 row)
+
+SELECT CAST('0.026'::FLOAT4 AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.03
+(1 row)
+
+SELECT CAST('-0.026'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.03
+(1 row)
+
+SELECT CAST('-0.025'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.02
+(1 row)
+
+SELECT CAST('-0.024'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.02
+(1 row)
+
+SELECT CAST('-0.016'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.02
+(1 row)
+
+SELECT CAST('-0.015'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.02
+(1 row)
+
+SELECT CAST('-0.014'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.01
+(1 row)
+
+SELECT CAST('-0.006'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ -0.01
+(1 row)
+
+SELECT CAST('-0.005'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.00
+(1 row)
+
+SELECT CAST('-0.004'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.00
+(1 row)
+
+SELECT CAST('0.004'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.00
+(1 row)
+
+SELECT CAST('0.005'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.00
+(1 row)
+
+SELECT CAST('0.006'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.01
+(1 row)
+
+SELECT CAST('0.014'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.01
+(1 row)
+
+SELECT CAST('0.015'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.02
+(1 row)
+
+SELECT CAST('0.016'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.02
+(1 row)
+
+SELECT CAST('0.024'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.02
+(1 row)
+
+SELECT CAST('0.025'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.02
+(1 row)
+
+SELECT CAST('0.026'::NUMERIC AS FIXEDDECIMAL);
+ fixeddecimal 
+--------------
+ 0.03
+(1 row)
+
+SELECT CAST('-2.6'::FIXEDDECIMAL AS INT);
+ int4 
+------
+   -3
+(1 row)
+
+SELECT CAST('-2.5'::FIXEDDECIMAL AS INT);
+ int4 
+------
+   -2
+(1 row)
+
+SELECT CAST('-2.4'::FIXEDDECIMAL AS INT);
+ int4 
+------
+   -2
+(1 row)
+
+SELECT CAST('-1.6'::FIXEDDECIMAL AS INT);
+ int4 
+------
+   -2
+(1 row)
+
+SELECT CAST('-1.5'::FIXEDDECIMAL AS INT);
+ int4 
+------
+   -2
+(1 row)
+
+SELECT CAST('-1.4'::FIXEDDECIMAL AS INT);
+ int4 
+------
+   -1
+(1 row)
+
+SELECT CAST('-0.6'::FIXEDDECIMAL AS INT);
+ int4 
+------
+   -1
+(1 row)
+
+SELECT CAST('-0.5'::FIXEDDECIMAL AS INT);
+ int4 
+------
+    0
+(1 row)
+
+SELECT CAST('-0.4'::FIXEDDECIMAL AS INT);
+ int4 
+------
+    0
+(1 row)
+
+SELECT CAST('0.4'::FIXEDDECIMAL AS INT);
+ int4 
+------
+    0
+(1 row)
+
+SELECT CAST('0.5'::FIXEDDECIMAL AS INT);
+ int4 
+------
+    0
+(1 row)
+
+SELECT CAST('0.6'::FIXEDDECIMAL AS INT);
+ int4 
+------
+    1
+(1 row)
+
+SELECT CAST('1.4'::FIXEDDECIMAL AS INT);
+ int4 
+------
+    1
+(1 row)
+
+SELECT CAST('1.5'::FIXEDDECIMAL AS INT);
+ int4 
+------
+    2
+(1 row)
+
+SELECT CAST('1.6'::FIXEDDECIMAL AS INT);
+ int4 
+------
+    2
+(1 row)
+
+SELECT CAST('2.4'::FIXEDDECIMAL AS INT);
+ int4 
+------
+    2
+(1 row)
+
+SELECT CAST('2.5'::FIXEDDECIMAL AS INT);
+ int4 
+------
+    2
+(1 row)
+
+SELECT CAST('2.6'::FIXEDDECIMAL AS INT);
+ int4 
+------
+    3
+(1 row)
+
+SELECT CAST('-2.6'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+   -3
+(1 row)
+
+SELECT CAST('-2.5'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+   -2
+(1 row)
+
+SELECT CAST('-2.4'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+   -2
+(1 row)
+
+SELECT CAST('-1.6'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+   -2
+(1 row)
+
+SELECT CAST('-1.5'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+   -2
+(1 row)
+
+SELECT CAST('-1.4'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+   -1
+(1 row)
+
+SELECT CAST('-0.6'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+   -1
+(1 row)
+
+SELECT CAST('-0.5'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+    0
+(1 row)
+
+SELECT CAST('-0.4'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+    0
+(1 row)
+
+SELECT CAST('0.4'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+    0
+(1 row)
+
+SELECT CAST('0.5'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+    0
+(1 row)
+
+SELECT CAST('0.6'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+    1
+(1 row)
+
+SELECT CAST('1.4'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+    1
+(1 row)
+
+SELECT CAST('1.5'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+    2
+(1 row)
+
+SELECT CAST('1.6'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+    2
+(1 row)
+
+SELECT CAST('2.4'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+    2
+(1 row)
+
+SELECT CAST('2.5'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+    2
+(1 row)
+
+SELECT CAST('2.6'::FIXEDDECIMAL AS SMALLINT);
+ int2 
+------
+    3
+(1 row)
+
+SELECT '-0.26'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.03
+(1 row)
+
+SELECT '-0.25'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-0.24'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-0.16'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-0.15'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-0.14'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.01
+(1 row)
+
+SELECT '-0.06'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.01
+(1 row)
+
+SELECT '-0.05'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '-0.04'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '0.04'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '0.05'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '0.06'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.01
+(1 row)
+
+SELECT '0.14'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.01
+(1 row)
+
+SELECT '0.15'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '0.16'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '0.24'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '0.25'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '0.26'::FIXEDDECIMAL / '10.00'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.03
+(1 row)
+
+SELECT '-0.26'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.03
+(1 row)
+
+SELECT '-0.25'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-0.24'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-0.16'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-0.15'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-0.14'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.01
+(1 row)
+
+SELECT '-0.06'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.01
+(1 row)
+
+SELECT '-0.05'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '-0.04'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '0.04'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '0.05'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '0.06'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.01
+(1 row)
+
+SELECT '0.14'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.01
+(1 row)
+
+SELECT '0.15'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '0.16'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '0.24'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '0.25'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '0.26'::FIXEDDECIMAL * '0.10'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.03
+(1 row)
+
+SELECT '-0.26'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ -0.03
+(1 row)
+
+SELECT '-0.25'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-0.24'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-0.16'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-0.15'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-0.14'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ -0.01
+(1 row)
+
+SELECT '-0.06'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ -0.01
+(1 row)
+
+SELECT '-0.05'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '-0.04'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '0.04'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '0.05'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '0.06'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ 0.01
+(1 row)
+
+SELECT '0.14'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ 0.01
+(1 row)
+
+SELECT '0.15'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '0.16'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '0.24'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '0.25'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '0.26'::FIXEDDECIMAL / '10'::INT4;
+ ?column? 
+----------
+ 0.03
+(1 row)
+
+-- fixeddecimalint4mul and int4fixeddecimalmul do not need rounding.
+SELECT '-0.26'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ -0.03
+(1 row)
+
+SELECT '-0.25'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-0.24'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-0.16'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-0.15'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-0.14'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ -0.01
+(1 row)
+
+SELECT '-0.06'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ -0.01
+(1 row)
+
+SELECT '-0.05'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '-0.04'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '0.04'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '0.05'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '0.06'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ 0.01
+(1 row)
+
+SELECT '0.14'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ 0.01
+(1 row)
+
+SELECT '0.15'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '0.16'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '0.24'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '0.25'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '0.26'::FIXEDDECIMAL / '10'::SMALLINT;
+ ?column? 
+----------
+ 0.03
+(1 row)
+
+-- fixeddecimalint2mul and int2fixeddecimalmul do not need rounding.
+SELECT '-26'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.03
+(1 row)
+
+SELECT '-25'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-24'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-16'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-15'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-14'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.01
+(1 row)
+
+SELECT '-06'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.01
+(1 row)
+
+SELECT '-05'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '-04'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '04'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '05'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '06'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.01
+(1 row)
+
+SELECT '14'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.01
+(1 row)
+
+SELECT '15'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '16'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '24'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '25'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '26'::SMALLINT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.03
+(1 row)
+
+SELECT '-26'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.03
+(1 row)
+
+SELECT '-25'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-24'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-16'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-15'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.02
+(1 row)
+
+SELECT '-14'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.01
+(1 row)
+
+SELECT '-06'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ -0.01
+(1 row)
+
+SELECT '-05'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '-04'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '04'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '05'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.00
+(1 row)
+
+SELECT '06'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.01
+(1 row)
+
+SELECT '14'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.01
+(1 row)
+
+SELECT '15'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '16'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '24'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '25'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.02
+(1 row)
+
+SELECT '26'::INT / '1000'::FIXEDDECIMAL;
+ ?column? 
+----------
+ 0.03
+(1 row)
+
+SELECT (54::fixeddecimal / 0.03::fixeddecimal) / 54::fixeddecimal * 0.03::fixeddecimal AS "Should be 1";
+ Should be 1 
+-------------
+ 1.00
+(1 row)
+
+WITH sums AS (
+        SELECT  SUM(dividend / divisor) AS most_precise,
+                --SUM(round_half_even(dividend / divisor, 2)) AS half_even_rounding,
+                SUM(dividend::fixeddecimal / divisor::fixeddecimal) AS fixeddecimal_rounding,
+                SUM( trunc(dividend / divisor, 2) ) AS trunc_rounding,
+                SUM( (dividend / divisor)::numeric(5,2) ) AS numeric_rounding
+        FROM    generate_series(.00::numeric,2::numeric,.01::numeric) AS dividend,
+                generate_series(.01::numeric,2::numeric,.01::numeric) AS divisor
+)
+SELECT  --most_precise - half_even_rounding AS half_even_error,
+        most_precise - fixeddecimal_rounding AS fixeddecimal_error,
+        most_precise - trunc_rounding AS trunc_error,
+        most_precise - numeric_rounding AS numeric_error
+FROM    sums;
+   fixeddecimal_error    |       trunc_error        |      numeric_error      
+-------------------------+--------------------------+-------------------------
+ -0.24794275896603177978 | 179.98205724103396822022 | -3.52794275896603177978
+(1 row)
+
+-- These should return 0 rows:
+/*
+SELECT  *,
+        round_half_even( dividend/divisor, 2),
+        dividend::fixeddecimal / divisor::fixeddecimal
+FROM    generate_series(0::numeric, 100::numeric, 1::numeric) AS dividend,
+        generate_series(1::numeric, 100::numeric, 1::numeric) AS divisor
+WHERE   round_half_even( dividend/divisor, 2) !=
+        dividend::fixeddecimal / divisor::fixeddecimal;
+
+SELECT  *,
+        round_half_even( dividend/divisor, 2),
+        dividend::fixeddecimal / divisor::fixeddecimal
+FROM    generate_series(.00::numeric, 2::numeric, .01::numeric) AS dividend,
+        generate_series(.01::numeric, 2::numeric, .01::numeric) AS divisor
+WHERE   round_half_even( dividend/divisor, 2) !=
+        dividend::fixeddecimal / divisor::fixeddecimal;
+*/

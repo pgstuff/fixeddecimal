@@ -8,7 +8,7 @@ INSERT INTO fixdec (id,d) VALUES(5, 0.12);
 INSERT INTO fixdec (id,d) VALUES(6, 1.23);
 INSERT INTO fixdec (id,d) VALUES(7, 12.34);
 INSERT INTO fixdec (id,d) VALUES(8, 123.45);
-INSERT INTO fixdec (id,d) VALUES(9, 123.456);
+INSERT INTO fixdec (id,d) VALUES(9, 123.451);
 
 -- Should fail
 CREATE UNIQUE INDEX fixdec_d_idx ON fixdec (d);

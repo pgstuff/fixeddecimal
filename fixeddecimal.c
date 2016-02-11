@@ -64,6 +64,10 @@
  */
 #define FIXEDDECIMAL_MAX_PRECISION 19 - FIXEDDECIMAL_SCALE
 
+// The fraction midpoints for half even rounding.
+#define FIXEDDECIMAL_FRAC_MID_POS (FIXEDDECIMAL_MULTIPLIER / 2LL)
+#define FIXEDDECIMAL_FRAC_MID_NEG (FIXEDDECIMAL_FRAC_MID_POS * -1LL)
+
 /* Define this if your compiler has _builtin_add_overflow() */
 /* #define HAVE_BUILTIN_OVERFLOW */
 
@@ -72,7 +76,7 @@
 #endif /* HAVE_BUILTIN_OVERFLOW */
 
 /* Compiler must have a working 128 int type */
-typedef __int128 int128;
+typedef __int128_t int128;
 
 #ifdef PG_MODULE_MAGIC
 PG_MODULE_MAGIC;
@@ -93,7 +97,7 @@ PG_FUNCTION_INFO_V1(fixeddecimalge);
 PG_FUNCTION_INFO_V1(fixeddecimal_cmp);
 PG_FUNCTION_INFO_V1(fixeddecimal_hash);
 PG_FUNCTION_INFO_V1(fixeddecimalum);
-PG_FUNCTION_INFO_V1(fixeddecimalup);
+//PG_FUNCTION_INFO_V1(fixeddecimalup);
 PG_FUNCTION_INFO_V1(fixeddecimalpl);
 PG_FUNCTION_INFO_V1(fixeddecimalmi);
 PG_FUNCTION_INFO_V1(fixeddecimalmul);
@@ -154,6 +158,76 @@ static void apply_typmod(int64 value, int32 typmod, int precision, int scale);
 static int64 scanfixeddecimal(const char *str, int *precision, int *scale);
 static FixedDecimalAggState *makeFixedDecimalAggState(FunctionCallInfo fcinfo);
 static void fixeddecimal_accum(FixedDecimalAggState *state, int64 newval);
+
+/* Debug with:
+SELECT  dividend::numeric/divisor::numeric as exact,
+		dividend * 100 * 100 / divisor as num_x_mul,
+		(dividend * 100 * 100 / divisor)::int / 100 as div_by_mul,
+		(dividend * 100 * 100 / divisor)::int - ((dividend * 100 * 100 / divisor)::int / 100)::int * 100 as frac
+FROM	(SELECT 1, 8) AS inputs (dividend, divisor)
+    Use FIXEDDECIMAL_MULTIPLIER for rounding because a whole number is
+    requested, or eliminate the need for a multiplication operation.
+*/
+static int128 round_half_even_no_remainder(int128 num_x_mul) {
+	int128 div_by_mul;
+	int frac;
+
+	div_by_mul = num_x_mul / FIXEDDECIMAL_MULTIPLIER;
+	frac = num_x_mul - div_by_mul * FIXEDDECIMAL_MULTIPLIER;
+
+	if (frac > FIXEDDECIMAL_FRAC_MID_NEG && frac < FIXEDDECIMAL_FRAC_MID_POS) {
+		return div_by_mul;
+	} else if (frac > FIXEDDECIMAL_FRAC_MID_POS) {
+		return div_by_mul + 1;
+	} else if (frac < FIXEDDECIMAL_FRAC_MID_NEG) {
+		return div_by_mul - 1;
+	} if (frac == FIXEDDECIMAL_FRAC_MID_POS) {
+		return div_by_mul + (div_by_mul & 1); // Odd
+	} if (frac == FIXEDDECIMAL_FRAC_MID_NEG) {
+		return div_by_mul - (div_by_mul & 1); // Odd
+	}
+	ereport(ERROR,
+			(errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+			errmsg("Bug in round_half_even code?  Ones is %d.  Maybe an overflow occurred.", frac)));
+}
+
+/* The rounding multiplier should be increased for this function only to reduce
+ * the expensive add_if_no_remainder code path that is required when the
+ * rounding fraction equals FIXEDDECIMAL_FRAC_MID_*, but keeping the rounding
+ * multiplier at FIXEDDECIMAL_MULTIPLIER makes things a little simpler for now.
+ * For example, the FRAC_MID constants (as used in this function, not the one
+ * above) need to be adjusted if this multiplier is different. Also, keeping
+ * this multiplier low will help vet the add_if_no_remainder code path. Remember
+ * to update the tests to ensure code coverage. */
+static int64 round_half_even(int128 num_x_mul, int64 *add_if_no_remainder) {
+	int128 div_by_mul;
+	int frac;
+
+	div_by_mul = num_x_mul / FIXEDDECIMAL_MULTIPLIER;
+	frac = num_x_mul - div_by_mul * FIXEDDECIMAL_MULTIPLIER;
+
+	if (div_by_mul != ((int64) div_by_mul))
+		ereport(ERROR,
+				(errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+				 errmsg("fixeddecimal out of range")));
+
+	if (frac > FIXEDDECIMAL_FRAC_MID_NEG && frac < FIXEDDECIMAL_FRAC_MID_POS) {
+		return div_by_mul;
+	} else if (frac > FIXEDDECIMAL_FRAC_MID_POS) {
+		return div_by_mul + 1;
+	} else if (frac < FIXEDDECIMAL_FRAC_MID_NEG) {
+		return div_by_mul - 1;
+	} if (frac == FIXEDDECIMAL_FRAC_MID_POS) {
+		*add_if_no_remainder = -!(div_by_mul & 1);
+		return div_by_mul + 1;
+	} if (frac == FIXEDDECIMAL_FRAC_MID_NEG) {
+		*add_if_no_remainder = !(div_by_mul & 1);
+		return div_by_mul - 1;
+	}
+	ereport(ERROR,
+			(errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+			errmsg("Bug in round_half_even code?  Ones is %d.  Maybe an overflow occurred.", frac)));
+}
 
 /***********************************************************************
  **
@@ -418,11 +492,38 @@ scanfixeddecimal(const char *str, int *precision, int *scale)
 		}
 
 		/*
-		 * Eat into any excess precision digits.
-		 * XXX These are ignored, should we error instead?
+		 * Be consistent with the behavior of the other exact type with regard to the loss of precision, numeric:
+		 * SELECT '1.129'::numeric(3, 2)
+		 * 1.13
+		 * However, being consistent with something similar does not always make it right.
 		 */
+		if (isdigit((unsigned char) *ptr))
+		{
+			int is_zero = 1;
+			switch (*ptr++) {
+				case '6':
+				case '7':
+				case '8':
+				case '9':
+					fractionalpart++; // The fractionalpart does not have a sign, so always add.
+				break;
+				case '5':
+					while (isdigit((unsigned char) *ptr)) {
+						if (*ptr++ != '0')
+							is_zero = 0;
+					}
+					if (is_zero) {
+						if (fractionalpart & 1) // Odd
+							fractionalpart++;
+					} else {
+						fractionalpart++;
+					}
+				break;
+			}
+		}
+		/* consume any remaining digits */
 		while (isdigit((unsigned char) *ptr))
-			ptr++, vscale++;
+			ptr++;
 	}
 
 	/* consume any remaining space chars */
@@ -775,13 +876,13 @@ fixeddecimalum(PG_FUNCTION_ARGS)
 	PG_RETURN_INT64(result);
 }
 
-Datum
+/*Datum
 fixeddecimalup(PG_FUNCTION_ARGS)
 {
 	int64		arg = PG_GETARG_INT64(0);
 
 	PG_RETURN_INT64(arg);
-}
+}*/
 
 Datum
 fixeddecimalpl(PG_FUNCTION_ARGS)
@@ -853,7 +954,7 @@ fixeddecimalmul(PG_FUNCTION_ARGS)
 	 * FIXEDDECIMAL_MULTIPLIER, we must divide the result by this to get
 	 * the correct result.
 	 */
-	result = (int128) arg1 * arg2 / FIXEDDECIMAL_MULTIPLIER;
+	result = round_half_even_no_remainder((int128) arg1 * arg2);
 
 	if (result != ((int64) result))
 		ereport(ERROR,
@@ -868,7 +969,8 @@ fixeddecimaldiv(PG_FUNCTION_ARGS)
 {
 	int64		dividend = PG_GETARG_INT64(0);
 	int64		divisor = PG_GETARG_INT64(1);
-	int128		result;
+	int64		result;
+	int64		add_if_no_remainder = 0;
 
 	if (divisor == 0)
 	{
@@ -888,14 +990,16 @@ fixeddecimaldiv(PG_FUNCTION_ARGS)
 	 * this can't overflow, but we can end up with a number that's too big for
 	 * int64
 	 */
-	result = (int128) dividend * FIXEDDECIMAL_MULTIPLIER / divisor;
+	result = round_half_even((int128) dividend * (FIXEDDECIMAL_MULTIPLIER * FIXEDDECIMAL_MULTIPLIER) / divisor, &add_if_no_remainder);
 
-	if (result != ((int64) result))
-		ereport(ERROR,
-				(errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
-				 errmsg("fixeddecimal out of range")));
+	if (add_if_no_remainder) {
+		// XXX Does this catch cases where the non-zero fraction is beyond the
+		// scale (.015000000000000000000000000000000001) if such a result is possible?
+		if (((int128) dividend * (FIXEDDECIMAL_MULTIPLIER * FIXEDDECIMAL_MULTIPLIER)) % divisor == 0)
+			result += add_if_no_remainder;
+	}
 
-	PG_RETURN_INT64((int64) result);
+	PG_RETURN_INT64(result);
 }
 
 /* fixeddecimalabs()
@@ -1038,11 +1142,12 @@ fixeddecimalint4mul(PG_FUNCTION_ARGS)
 Datum
 fixeddecimalint4div(PG_FUNCTION_ARGS)
 {
-	int64		arg1 = PG_GETARG_INT64(0);
-	int32		arg2 = PG_GETARG_INT32(1);
+	int64		dividend = PG_GETARG_INT64(0);
+	int32		divisor = PG_GETARG_INT32(1);
 	int64		result;
+	int64		add_if_no_remainder = 0;
 
-	if (arg2 == 0)
+	if (divisor == 0)
 	{
 		ereport(ERROR,
 				(errcode(ERRCODE_DIVISION_BY_ZERO),
@@ -1057,18 +1162,18 @@ fixeddecimalint4div(PG_FUNCTION_ARGS)
 	 * produce zero, some throw an exception.  We can dodge the problem by
 	 * recognizing that division by -1 is the same as negation.
 	 */
-	if (arg2 == -1)
+	if (divisor == -1)
 	{
 #ifdef HAVE_BUILTIN_OVERFLOW
 		int64 zero = 0;
-		if (__builtin_sub_overflow(zero, arg1, &result))
+		if (__builtin_sub_overflow(zero, dividend, &result))
 			ereport(ERROR,
 					(errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
 					 errmsg("fixeddecimal out of range")));
 #else
-		result = -arg1;
+		result = -dividend;
 		/* overflow check (needed for INT64_MIN) */
-		if (arg1 != 0 && SAMESIGN(result, arg1))
+		if (dividend != 0 && SAMESIGN(result, dividend))
 			ereport(ERROR,
 					(errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
 					 errmsg("fixeddecimal out of range")));
@@ -1077,9 +1182,19 @@ fixeddecimalint4div(PG_FUNCTION_ARGS)
 		PG_RETURN_INT64(result);
 	}
 
-	/* No overflow is possible */
+	// Maybe?
+	if (result != ((int64) result))
+		ereport(ERROR,
+				(errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+				 errmsg("fixeddecimal out of range")));
 
-	result = arg1 / arg2;
+	/* No overflow is possible */
+	result = round_half_even((int128) dividend * FIXEDDECIMAL_MULTIPLIER / divisor, &add_if_no_remainder);
+
+	if (add_if_no_remainder) {
+		if (((int128) dividend * FIXEDDECIMAL_MULTIPLIER) % divisor == 0)
+			result += add_if_no_remainder;
+	}
 
 	PG_RETURN_INT64(result);
 }
@@ -1180,10 +1295,12 @@ int4fixeddecimalmul(PG_FUNCTION_ARGS)
 Datum
 int4fixeddecimaldiv(PG_FUNCTION_ARGS)
 {
-	int32		arg1 = PG_GETARG_INT32(0);
-	float8		arg2 = (float8) PG_GETARG_INT64(1) / (float8) FIXEDDECIMAL_MULTIPLIER;
+	int32		dividend = PG_GETARG_INT32(0);
+	int64		divisor = PG_GETARG_INT64(1);
+	int64		result;
+	int64		add_if_no_remainder = 0;
 
-	if (arg2 == 0)
+	if (divisor == 0)
 	{
 		ereport(ERROR,
 				(errcode(ERRCODE_DIVISION_BY_ZERO),
@@ -1192,8 +1309,15 @@ int4fixeddecimaldiv(PG_FUNCTION_ARGS)
 		PG_RETURN_NULL();
 	}
 
+	result = round_half_even((int128) dividend * (FIXEDDECIMAL_MULTIPLIER * FIXEDDECIMAL_MULTIPLIER * FIXEDDECIMAL_MULTIPLIER) / divisor, &add_if_no_remainder);
+
+	if (add_if_no_remainder) {
+		if ((int128) dividend * (FIXEDDECIMAL_MULTIPLIER * FIXEDDECIMAL_MULTIPLIER * FIXEDDECIMAL_MULTIPLIER) % divisor == 0)
+			result += add_if_no_remainder;
+	}
+
 	/* No overflow is possible */
-	PG_RETURN_FLOAT8((float8) arg1 / arg2);
+	PG_RETURN_INT64(result);
 }
 
 Datum
@@ -1292,11 +1416,12 @@ fixeddecimalint2mul(PG_FUNCTION_ARGS)
 Datum
 fixeddecimalint2div(PG_FUNCTION_ARGS)
 {
-	int64		arg1 = PG_GETARG_INT64(0);
-	int16		arg2 = PG_GETARG_INT16(1);
+	int64		dividend = PG_GETARG_INT64(0);
+	int16		divisor = PG_GETARG_INT16(1);
 	int64		result;
+	int64		add_if_no_remainder = 0;
 
-	if (arg2 == 0)
+	if (divisor == 0)
 	{
 		ereport(ERROR,
 				(errcode(ERRCODE_DIVISION_BY_ZERO),
@@ -1311,18 +1436,18 @@ fixeddecimalint2div(PG_FUNCTION_ARGS)
 	 * produce zero, some throw an exception.  We can dodge the problem by
 	 * recognizing that division by -1 is the same as negation.
 	 */
-	if (arg2 == -1)
+	if (divisor == -1)
 	{
 #ifdef HAVE_BUILTIN_OVERFLOW
 		int64 zero = 0;
-		if (__builtin_sub_overflow(zero, arg1, &result))
+		if (__builtin_sub_overflow(zero, dividend, &result))
 			ereport(ERROR,
 					(errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
 					 errmsg("fixeddecimal out of range")));
 #else
-		result = -arg1;
+		result = -dividend;
 		/* overflow check (needed for INT64_MIN) */
-		if (arg1 != 0 && SAMESIGN(result, arg1))
+		if (dividend != 0 && SAMESIGN(result, dividend))
 			ereport(ERROR,
 					(errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
 					 errmsg("fixeddecimal out of range")));
@@ -1331,8 +1456,19 @@ fixeddecimalint2div(PG_FUNCTION_ARGS)
 		PG_RETURN_INT64(result);
 	}
 
+	// Maybe?
+	if (result != ((int64) result))
+		ereport(ERROR,
+				(errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+				 errmsg("fixeddecimal out of range")));
+
 	/* No overflow is possible */
-	result = arg1 / arg2;
+	result = round_half_even((int128) dividend * FIXEDDECIMAL_MULTIPLIER / divisor, &add_if_no_remainder);
+
+	if (add_if_no_remainder) {
+		if (((int128) dividend * FIXEDDECIMAL_MULTIPLIER) % divisor == 0)
+			result += add_if_no_remainder;
+	}
 
 	PG_RETURN_INT64(result);
 }
@@ -1433,10 +1569,12 @@ int2fixeddecimalmul(PG_FUNCTION_ARGS)
 Datum
 int2fixeddecimaldiv(PG_FUNCTION_ARGS)
 {
-	int16		arg1 = PG_GETARG_INT16(0);
-	float8		arg2 = PG_GETARG_INT64(1) / (float8) FIXEDDECIMAL_MULTIPLIER;
+	int16		dividend = PG_GETARG_INT16(0);
+	int64		divisor = PG_GETARG_INT64(1);
+	int64		result;
+	int64		add_if_no_remainder = 0;
 
-	if (arg2 == 0)
+	if (divisor == 0)
 	{
 		ereport(ERROR,
 				(errcode(ERRCODE_DIVISION_BY_ZERO),
@@ -1445,8 +1583,15 @@ int2fixeddecimaldiv(PG_FUNCTION_ARGS)
 		PG_RETURN_NULL();
 	}
 
+	result = round_half_even((int128) dividend * (FIXEDDECIMAL_MULTIPLIER * FIXEDDECIMAL_MULTIPLIER * FIXEDDECIMAL_MULTIPLIER) / divisor, &add_if_no_remainder);
+
+	if (add_if_no_remainder) {
+		if (((int128) dividend * (FIXEDDECIMAL_MULTIPLIER * FIXEDDECIMAL_MULTIPLIER * FIXEDDECIMAL_MULTIPLIER)) % divisor == 0)
+			result += add_if_no_remainder;
+	}
+
 	/* No overflow is possible */
-	PG_RETURN_INT64((float8) arg1 / arg2);
+	PG_RETURN_INT64(result);
 }
 
 /*----------------------------------------------------------
@@ -1485,7 +1630,7 @@ int4fixeddecimal(PG_FUNCTION_ARGS)
 Datum
 fixeddecimalint4(PG_FUNCTION_ARGS)
 {
-	int64		arg = PG_GETARG_INT64(0) / FIXEDDECIMAL_MULTIPLIER;
+	int128		arg = round_half_even_no_remainder(PG_GETARG_INT64(0));
 
 	if ((int32) arg != arg)
 		ereport(ERROR,
@@ -1506,7 +1651,7 @@ int2fixeddecimal(PG_FUNCTION_ARGS)
 Datum
 fixeddecimalint2(PG_FUNCTION_ARGS)
 {
-	int64		arg = PG_GETARG_INT64(0) / FIXEDDECIMAL_MULTIPLIER;
+	int128		arg = round_half_even_no_remainder(PG_GETARG_INT64(0));
 
 	if ((int16) arg != arg)
 		ereport(ERROR,
@@ -1533,25 +1678,27 @@ fixeddecimaltod(PG_FUNCTION_ARGS)
 Datum
 dtofixeddecimal(PG_FUNCTION_ARGS)
 {
-	float8		arg = PG_GETARG_FLOAT8(0) * FIXEDDECIMAL_MULTIPLIER;
-	int64		result;
+	float8		arg = PG_GETARG_FLOAT8(0) * (FIXEDDECIMAL_MULTIPLIER * FIXEDDECIMAL_MULTIPLIER);
+	int128		result;
 
-	/* Round arg to nearest integer (but it's still in float form) */
-	arg = rint(arg);
+	if ((int128) arg != arg)
+		ereport(ERROR,
+				(errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+				 errmsg("fixeddecimal out of range")));
+
+	result = round_half_even_no_remainder((int128) arg);
 
 	/*
 	 * Does it fit in an int64?  Avoid assuming that we have handy constants
 	 * defined for the range boundaries, instead test for overflow by
 	 * reverse-conversion.
 	 */
-	result = (int64) arg;
-
-	if ((float8) result != arg)
+	if ((int64) result != result)
 		ereport(ERROR,
 				(errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
 				 errmsg("fixeddecimal out of range")));
 
-	PG_RETURN_INT64(result);
+	PG_RETURN_INT64((int64) result);
 }
 
 Datum
@@ -1571,26 +1718,27 @@ fixeddecimaltof(PG_FUNCTION_ARGS)
 Datum
 ftofixeddecimal(PG_FUNCTION_ARGS)
 {
-	float4		arg = PG_GETARG_FLOAT4(0) * FIXEDDECIMAL_MULTIPLIER;
-	int64		result;
-	float8		darg;
+	float4		arg = PG_GETARG_FLOAT4(0) * (FIXEDDECIMAL_MULTIPLIER * FIXEDDECIMAL_MULTIPLIER);
+	int128		result;
 
-	/* Round arg to nearest integer (but it's still in float form) */
-	darg = rint(arg);
+	if ((int128) arg != arg)
+		ereport(ERROR,
+				(errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
+				 errmsg("fixeddecimal out of range")));
+
+	result = round_half_even_no_remainder((int128) arg);
 
 	/*
 	 * Does it fit in an int64?  Avoid assuming that we have handy constants
 	 * defined for the range boundaries, instead test for overflow by
 	 * reverse-conversion.
 	 */
-	result = (int64) darg;
-
-	if ((float8) result != darg)
+	if ((int64) result != result)
 		ereport(ERROR,
 				(errcode(ERRCODE_NUMERIC_VALUE_OUT_OF_RANGE),
 				 errmsg("fixeddecimal out of range")));
 
-	PG_RETURN_INT64(result);
+	PG_RETURN_INT64((int64) result);
 }
 
 

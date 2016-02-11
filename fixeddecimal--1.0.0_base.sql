@@ -309,7 +309,7 @@ AS 'fixeddecimal', 'int4fixeddecimalmul'
 LANGUAGE C IMMUTABLE STRICT;
 
 CREATE FUNCTION int4fixeddecimaldiv(INT4, FIXEDDECIMAL)
-RETURNS DOUBLE PRECISION
+RETURNS FIXEDDECIMAL
 AS 'fixeddecimal', 'int4fixeddecimaldiv'
 LANGUAGE C IMMUTABLE STRICT;
 
@@ -405,7 +405,7 @@ AS 'fixeddecimal', 'int2fixeddecimalmul'
 LANGUAGE C IMMUTABLE STRICT;
 
 CREATE FUNCTION int2fixeddecimaldiv(INT2, FIXEDDECIMAL)
-RETURNS DOUBLE PRECISION
+RETURNS FIXEDDECIMAL
 AS 'fixeddecimal', 'int2fixeddecimaldiv'
 LANGUAGE C IMMUTABLE STRICT;
 

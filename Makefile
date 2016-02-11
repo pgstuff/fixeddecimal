@@ -18,7 +18,7 @@ TESTS = $(wildcard test/sql/*.sql)
 REGRESS_BRIN := $(shell pg_config --version | grep -qE "XL 9\.[5-9]| 10\.0" && echo brin-xl)
 REGRESS_BRIN += $(shell pg_config --version | grep -E "9\.[5-9]| 10\.0" | grep -qEv "XL" && echo brin)
 REGRESS_VERSION_SPECIFIC := $(shell pg_config --version | grep -qE "XL" && echo index-xl || echo index)
-REGRESS = $(shell echo aggregate cast comparison overflow $(REGRESS_BRIN) $(REGRESS_VERSION_SPECIFIC))
+REGRESS = $(shell echo aggregate cast comparison overflow round $(REGRESS_BRIN) $(REGRESS_VERSION_SPECIFIC))
 
 REGRESS_OPTS = --inputdir=test --outputdir=test --load-extension=fixeddecimal
 
